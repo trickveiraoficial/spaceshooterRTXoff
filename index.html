@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Shooter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="score">Pontuação: <span id="scoreValue">0</span></div>
+        <div id="player"></div>
+        <button id="startButton" onclick="startGame()" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px 40px; font-size: 24px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; z-index: 1000;">Iniciar Jogo</button>
+    </div>
+    <div class="game-over hidden">
+        <h2>Game Over!</h2>
+        <p>Pontuação Final: <span id="finalScore">0</span></p>
+        <button onclick="restartGame()">Jogar Novamente</button>
+    </div>
+    <script src="audio/background-music.js"></script>
+    <script src="audio/sound-effects.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

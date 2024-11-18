@@ -1,0 +1,477 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(45deg, #1a1a1a, #000);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    color: #fff;
+}
+
+.game-container {
+    width: 800px;
+    height: 600px;
+    position: relative;
+    background: rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    border: 2px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.score {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #fff;
+    font-size: 24px;
+    z-index: 100;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Nave do jogador */
+#player {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: transform 0.1s;
+}
+
+/* Design da nave do jogador */
+#player::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #4a90e2, #357abd);
+    clip-path: polygon(
+        50% 0%,    /* Ponta superior */
+        100% 100%, /* Canto inferior direito */
+        80% 90%,   /* Detalhe direito */
+        20% 90%,   /* Detalhe esquerdo */
+        0% 100%    /* Canto inferior esquerdo */
+    );
+    box-shadow: 0 0 15px #4a90e2;
+}
+
+/* Motor da nave do jogador */
+#player::after {
+    content: '';
+    position: absolute;
+    width: 20%;
+    height: 30%;
+    bottom: -20%;
+    left: 40%;
+    background: #ff6b6b;
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    animation: thrust 0.2s infinite alternate;
+    box-shadow: 0 0 10px #ff6b6b;
+}
+
+/* Nave alienígena */
+.alien {
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    transition: transform 0.3s;
+}
+
+/* Corpo da nave alienígena */
+.alien::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ff4d4d, #cc0000);
+    clip-path: polygon(
+        0% 30%,    /* Ponta esquerda */
+        30% 0%,    /* Topo esquerdo */
+        70% 0%,    /* Topo direito */
+        100% 30%,  /* Ponta direita */
+        85% 100%,  /* Base direita */
+        15% 100%   /* Base esquerda */
+    );
+    box-shadow: 0 0 15px #ff4d4d;
+    animation: alienPulse 2s infinite alternate;
+}
+
+/* Cabine da nave alienígena */
+.alien::after {
+    content: '';
+    position: absolute;
+    width: 40%;
+    height: 40%;
+    top: 30%;
+    left: 30%;
+    background: #ffff00;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #ffff00;
+    animation: alienGlow 1s infinite alternate;
+}
+
+/* Animações */
+@keyframes thrust {
+    from {
+        transform: scaleY(1);
+        opacity: 0.8;
+    }
+    to {
+        transform: scaleY(1.5);
+        opacity: 0.4;
+    }
+}
+
+@keyframes alienPulse {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes alienGlow {
+    from {
+        opacity: 0.5;
+        box-shadow: 0 0 5px #ffff00;
+    }
+    to {
+        opacity: 1;
+        box-shadow: 0 0 15px #ffff00;
+    }
+}
+
+/* Melhorias nos lasers */
+.laser {
+    width: 3px;
+    height: 15px;
+    background: #00ff00;
+    position: absolute;
+    box-shadow: 0 0 8px #00ff00;
+}
+
+.alien-laser {
+    width: 3px;
+    height: 15px;
+    background: #ff00ff;
+    position: absolute;
+    box-shadow: 0 0 8px #ff00ff;
+    animation: laserPulse 0.2s infinite alternate;
+}
+
+@keyframes laserPulse {
+    from {
+        opacity: 0.8;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Explosão melhorada */
+.explosion {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, #ff6b6b, #ff0000);
+    border-radius: 50%;
+    animation: explode 0.2s ease-out forwards;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 20px #ff0000;
+}
+
+@keyframes explode {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+    }
+    50% {
+        box-shadow: 0 0 40px #ff0000;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+/* Estrelas de fundo */
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #fff;
+    opacity: 0.5;
+    animation: starAnimation 3s linear infinite;
+    box-shadow: 0 0 2px #fff;
+}
+
+@keyframes starAnimation {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(100vh);
+    }
+}
+
+.game-over {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    padding: 30px 50px;
+    border-radius: 15px;
+    text-align: center;
+    color: #fff;
+    z-index: 1000;
+    border: 2px solid #333;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.game-over h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #ff3333;
+}
+
+.game-over button {
+    padding: 12px 25px;
+    font-size: 18px;
+    background: linear-gradient(135deg, #00ff00, #008800);
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.game-over button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Boss */
+.boss {
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    top: 50px;
+    transition: transform 0.3s;
+}
+
+/* Corpo principal do boss */
+.boss::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #800080, #4b0082);
+    clip-path: polygon(
+        50% 0,     /* Topo central */
+        80% 20%,   /* Superior direito */
+        100% 50%,  /* Lateral direita */
+        80% 80%,   /* Inferior direito */
+        50% 100%,  /* Base central */
+        20% 80%,   /* Inferior esquerdo */
+        0 50%,     /* Lateral esquerda */
+        20% 20%    /* Superior esquerdo */
+    );
+    box-shadow: 0 0 30px #800080;
+    animation: bossHover 4s infinite alternate;
+}
+
+/* Núcleo do boss */
+.boss::after {
+    content: '';
+    position: absolute;
+    width: 40%;
+    height: 40%;
+    top: 30%;
+    left: 30%;
+    background: #ff0000;
+    border-radius: 50%;
+    box-shadow: 0 0 20px #ff0000;
+    animation: bossCore 2s infinite alternate;
+}
+
+/* Canhões do boss */
+.boss-cannon {
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    background: linear-gradient(90deg, #4b0082, #800080);
+    box-shadow: 0 0 10px #800080;
+}
+
+.boss-cannon.left {
+    left: -10px;
+    top: 45px;
+}
+
+.boss-cannon.right {
+    right: -10px;
+    top: 45px;
+}
+
+/* Tiro do boss */
+.boss-laser {
+    width: 8px;
+    height: 20px;
+    background: #ff00ff;
+    position: absolute;
+    box-shadow: 0 0 15px #ff00ff;
+    animation: bossLaserPulse 0.2s infinite alternate;
+}
+
+/* Animações do boss */
+@keyframes bossHover {
+    0% {
+        transform: translate(0, -10px) rotate(0deg);
+    }
+    50% {
+        transform: translate(0, 10px) rotate(180deg);
+    }
+    100% {
+        transform: translate(0, -10px) rotate(360deg);
+    }
+}
+
+@keyframes bossCore {
+    from {
+        transform: scale(0.8);
+        box-shadow: 0 0 20px #ff0000;
+    }
+    to {
+        transform: scale(1.2);
+        box-shadow: 0 0 40px #ff0000;
+    }
+}
+
+@keyframes bossLaserPulse {
+    from {
+        opacity: 0.7;
+        height: 20px;
+    }
+    to {
+        opacity: 1;
+        height: 25px;
+    }
+}
+
+/* Barra de vida do boss */
+.boss-health {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #fff;
+    border-radius: 5px;
+    padding: 10px;
+    width: 300px;
+    z-index: 1000;
+}
+
+.boss-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    color: #fff;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+}
+
+.boss-name {
+    color: #ff0;
+    text-shadow: 0 0 5px #ff0;
+}
+
+.boss-level {
+    color: #0ff;
+    text-shadow: 0 0 5px #0ff;
+}
+
+.boss-health-bar {
+    width: 100%;
+    height: 20px;
+    background: #300;
+    border: 1px solid #500;
+    position: relative;
+    overflow: hidden;
+}
+
+.boss-health-fill {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #f00, #f50);
+    transition: width 0.3s ease-out;
+    position: relative;
+}
+
+.boss-health-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.1) 100%
+    );
+    animation: healthShine 2s linear infinite;
+}
+
+@keyframes healthShine {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Estilo para o display de pontuação */
+.score {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 20, 40, 0.8));
+    border: 2px solid #4ff;
+    box-shadow: 0 0 15px rgba(68, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 12px 20px;
+    min-width: 120px;
+    text-align: center;
+    z-index: 9999;
+    font-family: 'Press Start 2P', monospace;
+    color: #4ff;
+    font-size: 14px;
+    text-shadow: 0 0 5px rgba(68, 255, 255, 0.5);
+}
+
+#scoreValue {
+    display: block;
+    margin-top: 5px;
+    color: #ff4;
+    font-size: 28px;
+    text-shadow: 0 0 10px rgba(255, 255, 68, 0.5);
+}
